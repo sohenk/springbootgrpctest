@@ -1,0 +1,23 @@
+
+spring:
+    application:
+        name: java-grpc-test
+    cloud:
+        nacos:
+            discovery:
+                namespace: public
+                service: ${spring.application.name}
+                watch:
+                    enabled: true
+                enabled: true
+            server-addr: 172.19.80.17:8848
+grpc:
+    server:
+        port: 8821
+opentracing:
+    jaeger:
+        enabled: true
+        expand-exception-logs: false
+        enable128-bit-traces: true
+        http-sender:
+            url: http://172.19.80.17:14268/api/traces

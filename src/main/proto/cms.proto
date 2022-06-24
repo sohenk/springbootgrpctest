@@ -1,0 +1,221 @@
+syntax = "proto3";
+
+package api.cms.service.v1;
+
+option go_package = "rchd/api/cms/service/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.cms.service.v1";
+
+//import "validate/validate.proto";
+import "google/protobuf/field_mask.proto";
+// import public "google/protobuf/timestamp.proto";
+
+//cms服务
+service Cms {
+	//创建栏目
+	rpc CreateCategory (CreateCategoryRequest) returns (CreateCategoryReply);
+	//更新栏目
+	rpc UpdateCategory (UpdateCategoryRequest) returns (UpdateCategoryReply);
+	//删除栏目
+	rpc DeleteCategory (DeleteCategoryRequest) returns (DeleteCategoryReply);
+	//查询栏目
+	rpc GetCategory (GetCategoryRequest) returns (GetCategoryReply);
+	//查询栏目列表
+	rpc ListCategory (ListCategoryRequest) returns (ListCategoryReply);
+	//根据父节点获取栏目列表
+	rpc ListCategoryByPid (ListCategoryByPidRequest) returns (ListCategoryByPidReply);
+
+	//创建文章
+	rpc CreateArticle (CreateArticleRequest) returns (CreateArticleReply);
+	//更新文章
+	rpc UpdateArticle (UpdateArticleRequest) returns (UpdateArticleReply);
+	//删除文章
+	rpc DeleteArticle (DeleteArticleRequest) returns (DeleteArticleReply);
+	//查询文章
+	rpc GetArticle (GetArticleRequest) returns (GetArticleReply);
+	//查询文章内容
+	rpc GetArticleData (GetArticleDataRequest) returns (GetArticleDataReply);
+	//查询文章列表
+	rpc ListArticle (ListArticleRequest) returns (ListArticleReply);
+	//根据栏目获取文章列表
+	rpc ListArticleByCid (ListArticleByCidRequest) returns (ListArticleByCidReply);
+
+}
+message Category{
+	string tenant_id=1;
+	string title=2;
+	string description=3;
+	string thumb=4;
+	string out_link=6;
+	uint64 views=7;
+	string icon=5;
+	string keywords=8;
+	string parent_id=9;
+	string status=10;
+	string creator_id=11;
+	string updater_id=12;
+	string created_at=13;
+	string updated_at=14;
+	string deleted_at=15;
+	string remark=16;
+	string sort=17;
+}
+message Article{
+	string tenant_id=1;
+	string title=2;
+	string description=3;
+	string thumb=4;
+	string out_link=6;
+	uint64 views=7;
+	string icon=5;
+	string keywords=8;
+	string category_id=9;
+	string status=10;
+	string creator_id=11;
+	string updater_id=12;
+	string created_at=13;
+	string updated_at=14;
+	string deleted_at=15;
+	string remark=16;
+	string sort=17;
+}
+message ArticleData{
+	int64 id=1;
+	//文章id
+	int64 article_id=2;
+	//内容
+	string content=3;
+	//是否允许评论
+	bool allow_comment=4;
+	//来源
+	string copy_from=5;
+}
+
+message CreateCategoryRequest {
+	string tenant_id=1;
+	Category category=2;
+
+}
+message CreateCategoryReply {
+	bool ok=1;
+	int64 id=2;
+}
+
+message UpdateCategoryRequest {
+	string tenant_id=1;
+	Category category=2;
+
+	google.protobuf.FieldMask field_mask = 3;
+}
+message UpdateCategoryReply {
+
+	Category category=1;
+}
+
+message DeleteCategoryRequest {
+	string tenant_id=1;
+}
+message DeleteCategoryReply {}
+
+message GetCategoryRequest {
+	string tenant_id=1;
+}
+message GetCategoryReply {
+	Category category=1;
+}
+
+message ListCategoryRequest {
+	string tenant_id=1;
+}
+message ListCategoryReply {
+	int64 page_no = 1;
+	int64 page_size = 2;
+	repeated Category list = 3;
+	int64 total_size=4;
+	uint64 total_page=5;
+	google.protobuf.FieldMask show_field_mask = 6;
+}
+
+message CreateArticleRequest {
+	string tenant_id=1;
+	Article article=2;
+}
+message CreateArticleReply {
+	string tenant_id=1;
+	int64 id=2;
+}
+
+message UpdateArticleRequest {
+	string tenant_id=1;
+	Article article=2;
+	google.protobuf.FieldMask update_field_mask = 3;
+}
+message UpdateArticleReply {
+	bool ok=1;
+}
+
+message DeleteArticleRequest {
+	string tenant_id=1;
+	string ids=2;
+}
+message DeleteArticleReply {
+	bool ok=1;
+}
+
+message GetArticleRequest {
+	string tenant_id=1;
+	int64 id=2;
+	google.protobuf.FieldMask show_field_mask = 3;
+}
+message GetArticleReply {
+	Article article=1;
+	google.protobuf.FieldMask show_field_mask = 2;
+}
+
+message ListArticleRequest {
+	string tenant_id=1;
+	google.protobuf.FieldMask show_field_mask = 2;
+}
+message ListArticleReply {
+	int64 page_no = 1;
+	int64 page_size = 2;
+	repeated Article list = 3;
+	int64 total_size=4;
+	uint64 total_page=5;
+	google.protobuf.FieldMask show_field_mask = 6;
+}
+message ListCategoryByPidRequest{
+	string tenant_id=1;
+	string parent_id=2;
+	google.protobuf.FieldMask show_field_mask = 3;
+}
+message ListCategoryByPidReply{
+	int64 page_no = 1;
+	int64 page_size = 2;
+	repeated Category list = 3;
+	int64 total_size=4;
+	uint64 total_page=5;
+	google.protobuf.FieldMask show_field_mask = 6;
+}
+message ListArticleByCidRequest{
+	string tenant_id=1;
+	string category_id=2;
+	google.protobuf.FieldMask show_field_mask = 3;
+}
+message ListArticleByCidReply{
+	int64 page_no = 1;
+	int64 page_size = 2;
+	repeated Article list = 3;
+	int64 total_size=4;
+	uint64 total_page=5;
+	google.protobuf.FieldMask show_field_mask = 6;
+}
+message GetArticleDataRequest{
+	string tenant_id=1;
+	int64 id=2;
+	google.protobuf.FieldMask show_field_mask = 3;
+}
+message GetArticleDataReply{
+	ArticleData article_data=1;
+	google.protobuf.FieldMask show_field_mask = 2;
+}
